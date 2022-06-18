@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Lab5AspNetCoreEfIndividual.Models.HospitalViewModels.PatientDiagnosisGroup>
+
+@{ 
+    ViewData["Title"] = "Patient Statistics";
+}
+
+<h2>Patient Statistics</h2>
+
+<table>
+    <tr>
+        <th>
+            Diagnosis
+        </th>
+        <th>
+            Patients
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnosis)
+            </td>
+            <td>
+                @item.PatientCount
+            </td>
+        </tr>
+    }
+</table>

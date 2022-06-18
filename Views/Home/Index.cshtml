@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Doctors and Patients</h1>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <h2>Lab 5</h2>
+        <p>
+            Create a WEB page with DB.
+            Use APS.NET&nbsp;Core&nbsp;5.0&nbsp;MVC and Entity&nbsp;Framework&nbsp;Core
+        </p>
+    </div>
+    @*TODO: Add links to entity pages*@
+    <div class="col-md-3">
+        <h2>Doctors</h2>
+        <p>
+            You can create, update, delete and see details about Doctors
+        </p>
+        <p><a class="btn btn-primary" href="#">Go</a></p>
+    </div>
+    <div class="col-md-3">
+        <h2>Patients</h2>
+        <p>
+            You can create, update, delete and see details about Patients
+        </p>
+        <p><a class="btn btn-primary" href="#">Go</a></p>
+    </div>
+    <div class="col-md-3">
+        <h2>Consultations</h2>
+        <p>
+            Each Patient belongs to the Doctor via the Consultation.
+            The first Consultation is created under the hood when you assign a Patient to a Doctor.
+            Later you can update, delete and see details about Consultations or add a new one for the same Doctor and Patient
+        </p>
+        <p><a class="btn btn-primary" href="#">Go</a></p>
+    </div>
+</div>

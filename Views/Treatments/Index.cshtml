@@ -1,0 +1,144 @@
+﻿@*@model IEnumerable<Lab5AspNetCoreEfIndividual.Models.Treatment>*@
+@model Lab5AspNetCoreEfIndividual.Models.HospitalViewModels.TreatmentIndexData
+
+@{
+    ViewData["Title"] = "Treatments";
+}
+
+<h2>Treatments</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Defenition
+            </th>
+            <th>
+                Room #
+            </th>
+            <th>
+                Belongs to
+            </th>
+            <th>
+                Contraindication
+            </th>
+            <th>
+                Performed By
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Treatments)
+        {
+            string selectedRow = "";
+            if (item.ID == (int?)ViewData["TreatmentID"])
+            {
+                selectedRow = "table-success";
+            }
+            // Conditionally adds a Bootstrap CSS class.
+            // This class sets a background color for the selected row.
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.TreatmentTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Defenition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department.Name)
+                </td>
+                <td>
+                    @if (item.TreatmentContraindication != null)
+                    {
+                        @item.TreatmentContraindication.Overview
+                    }
+                </td>
+                <td>
+                    @foreach (var doctor in item.TreatmentAssignments)
+                    {
+                        @doctor.Doctor.DoctorName <br />
+                    }
+                </td>
+                <td>
+                    @*causes the selected treatment's ID to be sent to the Index method*@
+                    <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Doctors != null)
+{
+    <h3>These Doctors perform the Selected Treatment</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Job Title</th>
+            @*TODO: Update Doctor model and add Phone Number*@
+        </tr>
+
+        @foreach (var item in Model.Doctors)
+        {
+            string selectedRow = "";
+            if (item.DoctorID == (int?)ViewData["DoctorID"])
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", "Index", new { doctorID = item.DoctorID })
+                </td>
+                <td>
+                    @item.DoctorName
+                </td>
+                <td>
+                    @item.JobTitle
+                </td>
+                @*<td>
+                        @item.PhoneNumber
+                    </td>*@
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.Consultations != null)
+            {
+                <h3>Selected Doctor's Patients</h3>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Room #</th>
+                    </tr>
+                    @foreach (var item in Model.Consultations)
+                {
+                    <tr>
+                        <td>
+                            @item.Patient.PatientName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ConsultationDate)
+                        </td>
+                        <td>
+                            @item.RoomNumber
+                        </td>
+                    </tr>
+                }
+                </table>
+            }
