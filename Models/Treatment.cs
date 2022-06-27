@@ -18,7 +18,7 @@ namespace Lab5AspNetCoreEfIndividual.Models
 
         [Required]
         [StringLength(250)]
-        public string Defenition { get; set; }
+        public string Definition { get; set; }
 
         [Display(Name = "Room Number")]
         public int RoomNumber { get; set; }

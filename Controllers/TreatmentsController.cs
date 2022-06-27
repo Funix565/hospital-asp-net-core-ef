@@ -105,7 +105,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,TreatmentTitle,Defenition,RoomNumber,DepartmentID")] Treatment treatment)
+        public async Task<IActionResult> Create([Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID")] Treatment treatment)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +139,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,TreatmentTitle,Defenition,RoomNumber,DepartmentID")] Treatment treatment)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID")] Treatment treatment)
         {
             if (id != treatment.ID)
             {

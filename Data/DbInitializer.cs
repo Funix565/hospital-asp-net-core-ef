@@ -79,49 +79,49 @@ namespace Lab5AspNetCoreEfIndividual.Data
             {
                 new Treatment {
                     TreatmentTitle = "Blood test",
-                    Defenition = "A laboratory analysis performed on a blood sample that is usually extracted from a vein in the arm using a hypodermic needle, or via fingerprick",
+                    Definition = "A laboratory analysis performed on a blood sample that is usually extracted from a vein in the arm using a hypodermic needle, or via fingerprick",
                     RoomNumber = 2020,
                     DepartmentID = departments.Single(s => s.Name == "Dermatology").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Chemotherapy",
-                    Defenition = "A type of cancer treatment that uses one or more anti-cancer drugs as part of a standardized chemotherapy regimen",
+                    Definition = "A type of cancer treatment that uses one or more anti-cancer drugs as part of a standardized chemotherapy regimen",
                     RoomNumber = 2090,
                     DepartmentID = departments.Single(s => s.Name == "Brain Tumor Program").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Radiation therapy",
-                    Defenition = "A therapy using ionizing radiation, generally provided as part of cancer treatment to control or kill malignant cells and normally delivered by a linear accelerator",
+                    Definition = "A therapy using ionizing radiation, generally provided as part of cancer treatment to control or kill malignant cells and normally delivered by a linear accelerator",
                     RoomNumber = 2030,
                     DepartmentID = departments.Single(s => s.Name == "Brain Tumor Program").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Palliative care",
-                    Defenition = "An interdisciplinary medical caregiving approach aimed at optimizing quality of life and mitigating suffering among people with serious, complex, and often terminal illnesses",
+                    Definition = "An interdisciplinary medical caregiving approach aimed at optimizing quality of life and mitigating suffering among people with serious, complex, and often terminal illnesses",
                     RoomNumber = 2040,
                     DepartmentID = departments.Single(s => s.Name == "Brain Tumor Program").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Facial rejuvenation",
-                    Defenition = "A cosmetic treatment, which aims to restore a youthful appearance to the human face",
+                    Definition = "A cosmetic treatment, which aims to restore a youthful appearance to the human face",
                     RoomNumber = 2050,
                     DepartmentID = departments.Single(s => s.Name == "Dermatology").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Lobotomy",
-                    Defenition = "A form of neurosurgical treatment for psychiatric disorder or neurological disorder that involves severing connections in the brain's prefrontal cortex",
+                    Definition = "A form of neurosurgical treatment for psychiatric disorder or neurological disorder that involves severing connections in the brain's prefrontal cortex",
                     RoomNumber = 2060,
                     DepartmentID = departments.Single(s => s.Name == "Brain Tumor Program").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Nicotine replacement therapy",
-                    Defenition = "A medically approved way to treat people with tobacco use disorder by taking nicotine by means other than tobacco",
+                    Definition = "A medically approved way to treat people with tobacco use disorder by taking nicotine by means other than tobacco",
                     RoomNumber = 2070,
                     DepartmentID = departments.Single(s => s.Name == "Brain Tumor Program").DepartmentID
                 },
                 new Treatment {
                     TreatmentTitle = "Biopsy",
-                    Defenition = "The process involves extraction of sample cells or tissues for examination to determine the presence or extent of a disease",
+                    Definition = "The process involves extraction of sample cells or tissues for examination to determine the presence or extent of a disease",
                     RoomNumber = 2080,
                     DepartmentID = departments.Single(s => s.Name == "Dermatology").DepartmentID
                 }
