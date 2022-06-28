@@ -84,6 +84,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
 
             var treatment = await _context.Treatments
                 .Include(t => t.Department)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (treatment == null)
             {
@@ -93,19 +94,39 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             return View(treatment);
         }
 
-        // GET: Treatments/Create
+        //// GET: Treatments/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
+        //    return View();
+        //}
+
         public IActionResult Create()
         {
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
+            PopulateDepartmentsDropDownList();
             return View();
         }
 
         // POST: Treatments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID")] Treatment treatment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(treatment);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", treatment.DepartmentID);
+        //    return View(treatment);
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID")] Treatment treatment)
+        public async Task<IActionResult> Create([Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID,TreatmentContraindication")] Treatment treatment)
         {
             if (ModelState.IsValid)
             {
@@ -113,11 +134,28 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", treatment.DepartmentID);
+
+            PopulateDepartmentsDropDownList(treatment.DepartmentID);
             return View(treatment);
         }
 
-        // GET: Treatments/Edit/5
+        //// GET: Treatments/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var treatment = await _context.Treatments.FindAsync(id);
+        //    if (treatment == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", treatment.DepartmentID);
+        //    return View(treatment);
+        //}
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -125,49 +163,107 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 return NotFound();
             }
 
-            var treatment = await _context.Treatments.FindAsync(id);
+            var treatment = await _context.Treatments
+                .Include(t => t.TreatmentContraindication)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (treatment == null)
             {
                 return NotFound();
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", treatment.DepartmentID);
+
+            PopulateDepartmentsDropDownList(treatment.DepartmentID);
             return View(treatment);
         }
 
-        // POST: Treatments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //// POST: Treatments/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID")] Treatment treatment)
+        //{
+        //    if (id != treatment.ID)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(treatment);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TreatmentExists(treatment.ID))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", treatment.DepartmentID);
+        //    return View(treatment);
+        //}
+
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,TreatmentTitle,Definition,RoomNumber,DepartmentID")] Treatment treatment)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != treatment.ID)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var treatmentToUpdate = await _context.Treatments
+                .Include(t => t.TreatmentContraindication)
+                .FirstOrDefaultAsync(t => t.ID == id);
+
+            if (await TryUpdateModelAsync<Treatment>(
+                treatmentToUpdate,
+                "",
+                t => t.TreatmentTitle, t => t.Definition, t => t.RoomNumber, t => t.DepartmentID,
+                t => t.TreatmentContraindication))
             {
+                // If the overview is blank, set the property to null.
+                // The related row in the TreatmentContraindication will be deleted.
+                if (String.IsNullOrWhiteSpace(treatmentToUpdate.TreatmentContraindication?.Overview))
+                {
+                    treatmentToUpdate.TreatmentContraindication = null;
+                }
+
                 try
                 {
-                    _context.Update(treatment);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException /* ex */ )
                 {
-                    if (!TreatmentExists(treatment.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "Unable to save changes.");
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", treatment.DepartmentID);
-            return View(treatment);
+
+            PopulateDepartmentsDropDownList(treatmentToUpdate.DepartmentID);
+            return View(treatmentToUpdate);
+        }
+
+
+        // The method accepts the optional parameter that allows the calling code
+        // to specify the item that will be selected when the drop-down list is rendered.
+        private void PopulateDepartmentsDropDownList(object selectedDepartment = null)
+        {
+            var departmentsQuery = from d in _context.Departments
+                                   orderby d.Name
+                                   select d;
+            
+            ViewBag.DepartmentID = new SelectList(departmentsQuery.AsNoTracking(), "DepartmentID", "Name", selectedDepartment);
         }
 
         // GET: Treatments/Delete/5
@@ -180,6 +276,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
 
             var treatment = await _context.Treatments
                 .Include(t => t.Department)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (treatment == null)
             {

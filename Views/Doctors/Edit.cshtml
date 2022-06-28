@@ -23,17 +23,52 @@
                 <input asp-for="JobTitle" class="form-control" />
                 <span asp-validation-for="JobTitle" class="text-danger"></span>
             </div>
+            @*This code creates an HTML table that has three columns*@
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="offset-md-2 col-md-10">
+                    <table>
+                        <tr>
+                            @{
+                                //In each column is a checkbox followed by a caption
+                                int cnt = 0;
+                                List<Lab5AspNetCoreEfIndividual.Models.HospitalViewModels.AssignedTreatmentData> treatments = ViewBag.Treatments;
+
+                                foreach (var treatment in treatments)
+                                {
+                                    if (cnt++ % 3 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    // When the checkboxes are initially rendered,
+                                    // those that are for treatments assigned to the doctor have checked attributes
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedTreatments"
+                                               value="@treatment.TreatmentID"
+                                               @(Html.Raw(treatment.Assigned ? "checked=\"checked\"" : "")) />
+                                               @treatment.Title
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                @*When the page is posted, the model binder passes an array to the controller
+                    that consists of the TreatmentID values for only the checkboxes which are selected.*@
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    @*Note: With @ you may write C# within HTML and with @: you may write HTML within C#*@
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

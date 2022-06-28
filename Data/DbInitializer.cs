@@ -146,7 +146,7 @@ namespace Lab5AspNetCoreEfIndividual.Data
                 },
                 new TreatmentContraindication {
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Biopsy").ID,
-                    Overview = "CUncorrectable bleeding diathesis. Skin infection at biopsy site"
+                    Overview = "Uncorrectable bleeding diathesis. Skin infection at biopsy site"
                 },
                 new TreatmentContraindication {
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Facial rejuvenation").ID,
