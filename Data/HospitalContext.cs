@@ -27,6 +27,15 @@ namespace Lab5AspNetCoreEfIndividual.Data
         // Specifying singular table names.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // TODO: Optimistic concurrency in Npgsql:
+            // - https://www.npgsql.org/efcore/modeling/concurrency.html
+            // - https://stackoverflow.com/q/60801649
+            // - https://github.com/npgsql/efcore.pg/issues/19#issue-148354668
+            
+            // Probably, this modification is required. It didn't work with just a column in Department model
+            modelBuilder.Entity<Department>()
+                .UseXminAsConcurrencyToken();
+
             modelBuilder.Entity<Doctor>().ToTable("Doctor");
             modelBuilder.Entity<Consultation>().ToTable("Consultation");
             modelBuilder.Entity<Patient>().ToTable("Patient");
