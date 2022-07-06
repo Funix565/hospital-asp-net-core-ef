@@ -65,6 +65,12 @@ namespace Lab5AspNetCoreEfIndividual.Data
                     Budget = 300000,
                     EstablishmentDate = DateTime.Parse("2005-10-23"),
                     DoctorID = docotrs.Single(d => d.DoctorName == "Orest Lypa").DoctorID
+                },
+                new Department {
+                    Name = "Cardiology",
+                    Budget = 123000,
+                    EstablishmentDate = DateTime.Parse("2002-10-14"),
+                    DoctorID = docotrs.Single(d => d.DoctorName == "Orest Lypa").DoctorID
                 }
             };
 
