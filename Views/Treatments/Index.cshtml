@@ -67,7 +67,7 @@
                 <td>
                     @foreach (var doctor in item.TreatmentAssignments)
                     {
-                        @doctor.Doctor.DoctorName <br />
+                        @doctor.Doctor.Name <br />
                     }
                 </td>
                 <td>
@@ -90,22 +90,22 @@
             <th></th>
             <th>Name</th>
             <th>Job Title</th>
-            @*TODO: Update Doctor model and add Phone Number*@
+            @*TODO: Update Doctor model and add Phone Number, email*@
         </tr>
 
         @foreach (var item in Model.Doctors)
         {
             string selectedRow = "";
-            if (item.DoctorID == (int?)ViewData["DoctorID"])
+            if (item.ID == (int?)ViewData["DoctorID"])
             {
                 selectedRow = "table-success";
             }
             <tr class="@selectedRow">
                 <td>
-                    @Html.ActionLink("Select", "Index", new { doctorID = item.DoctorID })
+                    @Html.ActionLink("Select", "Index", new { doctorID = item.ID })
                 </td>
                 <td>
-                    @item.DoctorName
+                    @item.Name
                 </td>
                 <td>
                     @item.JobTitle
@@ -131,7 +131,7 @@
                 {
                     <tr>
                         <td>
-                            @item.Patient.PatientName
+                            @item.Patient.Name
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ConsultationDate)

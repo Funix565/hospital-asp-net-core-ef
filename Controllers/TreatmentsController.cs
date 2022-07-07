@@ -68,7 +68,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             {
                 ViewData["DoctorID"] = doctorID.Value;
                 viewModel.Consultations = viewModel.Doctors.Where(
-                    x => x.DoctorID == doctorID).Single().Consultations;
+                    x => x.ID == doctorID).Single().Consultations;
             }
 
             return View(viewModel);

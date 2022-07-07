@@ -22,6 +22,8 @@ namespace Lab5AspNetCoreEfIndividual.Data
         public DbSet<Treatment> Treatments { get; set; }
         public DbSet<TreatmentContraindication> TreatmentContraindications { get; set; }
         public DbSet<TreatmentAssignment> TreatmentAssignments { get; set; }
+        // 1) TPH
+        public DbSet<Person> People { get; set; }
 
         // When the database is created, EF creates tables that have names the same as the DbSet property names.
         // Specifying singular table names.
@@ -36,13 +38,16 @@ namespace Lab5AspNetCoreEfIndividual.Data
             modelBuilder.Entity<Department>()
                 .UseXminAsConcurrencyToken();
 
-            modelBuilder.Entity<Doctor>().ToTable("Doctor");
+            modelBuilder.Entity<Doctor>().ToTable("Person");
             modelBuilder.Entity<Consultation>().ToTable("Consultation");
-            modelBuilder.Entity<Patient>().ToTable("Patient");
+            modelBuilder.Entity<Patient>().ToTable("Person");
             modelBuilder.Entity<Department>().ToTable("Department");
             modelBuilder.Entity<Treatment>().ToTable("Treatment");
             modelBuilder.Entity<TreatmentContraindication>().ToTable("TreatmentContraindication");
             modelBuilder.Entity<TreatmentAssignment>().ToTable("TreatmentAssignment");
+            // 2) TPH
+            // This is all that the Entity Framework needs in order to configure table-per-hierarchy inheritance
+            modelBuilder.Entity<Person>().ToTable("Person");
 
             // Configure composite primary key.
             // Note: Fluent API overrides attributes.

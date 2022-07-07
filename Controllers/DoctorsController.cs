@@ -35,7 +35,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             }
 
             var doctor = await _context.Doctors
-                .FirstOrDefaultAsync(m => m.DoctorID == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (doctor == null)
             {
                 return NotFound();
@@ -72,7 +72,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DoctorName,JobTitle")] Doctor doctor, string[] selectedTreatments)
+        public async Task<IActionResult> Create([Bind("Name,JobTitle")] Doctor doctor, string[] selectedTreatments)
         {
             if (selectedTreatments != null)
             {
@@ -82,7 +82,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 doctor.TreatmentAssignments = new List<TreatmentAssignment>();
                 foreach (var treatment in selectedTreatments)
                 {
-                    var treatmentToAdd = new TreatmentAssignment { DoctorID = doctor.DoctorID, TreatmentID = int.Parse(treatment) };
+                    var treatmentToAdd = new TreatmentAssignment { DoctorID = doctor.ID, TreatmentID = int.Parse(treatment) };
                     doctor.TreatmentAssignments.Add(treatmentToAdd);
                 }
             }
@@ -111,7 +111,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             var doctor = await _context.Doctors
                 .Include(d => d.TreatmentAssignments).ThenInclude(d => d.Treatment)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.DoctorID == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             
             if (doctor == null)
             {
@@ -187,12 +187,12 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             var doctorToUpdate = await _context.Doctors
                 .Include(d => d.TreatmentAssignments)
                     .ThenInclude(d => d.Treatment)
-                .FirstOrDefaultAsync(m => m.DoctorID == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             if (await TryUpdateModelAsync<Doctor>(
                 doctorToUpdate,
                 "",
-                d => d.DoctorName, d => d.JobTitle))
+                d => d.Name, d => d.JobTitle))
             {
                 UpdateDoctorTreatments(selectedTreatments, doctorToUpdate);
                 try
@@ -230,12 +230,12 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             {
                 // If the checkbox for a treatment was selected
                 // but the treatment isn't in the navigation property,
-                // the course is added to the collection in the navigation property.
+                // the treatment is added to the collection in the navigation property.
                 if (selectedTreatmentsHS.Contains(treatment.ID.ToString()))
                 {
                     if (!doctorTreatments.Contains(treatment.ID))
                     {
-                        doctorToUpdate.TreatmentAssignments.Add(new TreatmentAssignment { DoctorID = doctorToUpdate.DoctorID, TreatmentID = treatment.ID });
+                        doctorToUpdate.TreatmentAssignments.Add(new TreatmentAssignment { DoctorID = doctorToUpdate.ID, TreatmentID = treatment.ID });
                     }
                 }
                 else
@@ -261,7 +261,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             }
 
             var doctor = await _context.Doctors
-                .FirstOrDefaultAsync(m => m.DoctorID == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (doctor == null)
             {
                 return NotFound();
@@ -290,7 +290,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             // Could be configured with cascade delete in the database.
             Doctor doctor = await _context.Doctors
                 .Include(d => d.TreatmentAssignments)
-                .SingleAsync(d => d.DoctorID == id);
+                .SingleAsync(d => d.ID == id);
 
             // Remove the doctor from departments
             var departments = await _context.Departments
@@ -306,7 +306,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
 
         private bool DoctorExists(int id)
         {
-            return _context.Doctors.Any(e => e.DoctorID == id);
+            return _context.Doctors.Any(e => e.ID == id);
         }
     }
 }

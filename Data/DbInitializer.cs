@@ -20,11 +20,11 @@ namespace Lab5AspNetCoreEfIndividual.Data
 
             var patients = new Patient[]
             {
-                new Patient { PatientName = "Alla Tkach", Diagnosis = "Cancer", InsuranceId = 12345 },
-                new Patient { PatientName = "Ivan Hanov", Diagnosis = "Headache", InsuranceId = 54321 },
-                new Patient { PatientName = "Stepan Franko", Diagnosis = "Diabet", InsuranceId = 48195 },
-                new Patient { PatientName = "Adolf Pumakov", Diagnosis = "Arrhythmia", InsuranceId = 19045 },
-                new Patient { PatientName = "Kate Lobanova", Diagnosis = "Arthritis", InsuranceId = 100000 }
+                new Patient { Name = "Alla Tkach", Diagnosis = "Cancer", InsuranceId = 12345 },
+                new Patient { Name = "Ivan Hanov", Diagnosis = "Headache", InsuranceId = 54321 },
+                new Patient { Name = "Stepan Franko", Diagnosis = "Diabet", InsuranceId = 48195 },
+                new Patient { Name = "Adolf Pumakov", Diagnosis = "Arrhythmia", InsuranceId = 19045 },
+                new Patient { Name = "Kate Lobanova", Diagnosis = "Arthritis", InsuranceId = 100000 }
             };
 
             foreach (Patient p in patients)
@@ -37,12 +37,12 @@ namespace Lab5AspNetCoreEfIndividual.Data
 
             var docotrs = new Doctor[]
             {
-                new Doctor{ DoctorName = "Taras Dub", JobTitle = "Intern" },
-                new Doctor{ DoctorName = "Orest Lypa", JobTitle = "Dentist" },
-                new Doctor{ DoctorName = "Max Pain", JobTitle = "Massage therapist" },
-                new Doctor{ DoctorName = "Kyrylo Bereza", JobTitle = "Acupuncturist" },
-                new Doctor{ DoctorName = "Iren Red", JobTitle = "Paramedic" },
-                new Doctor{ DoctorName = "Chris Green", JobTitle = "Mental Health Support Worker" }
+                new Doctor{ Name = "Taras Dub", JobTitle = "Intern" },
+                new Doctor{ Name = "Orest Lypa", JobTitle = "Dentist" },
+                new Doctor{ Name = "Max Pain", JobTitle = "Massage therapist" },
+                new Doctor{ Name = "Kyrylo Bereza", JobTitle = "Acupuncturist" },
+                new Doctor{ Name = "Iren Red", JobTitle = "Paramedic" },
+                new Doctor{ Name = "Chris Green", JobTitle = "Mental Health Support Worker" }
             };
 
             foreach (Doctor d in docotrs)
@@ -58,19 +58,19 @@ namespace Lab5AspNetCoreEfIndividual.Data
                     Name = "Brain Tumor Program",
                     Budget = 1000000,
                     EstablishmentDate = DateTime.Parse("2021-06-14"),
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Taras Dub").DoctorID
+                    DoctorID = docotrs.Single(d => d.Name == "Taras Dub").ID
                 },
                 new Department {
                     Name = "Dermatology",
                     Budget = 300000,
                     EstablishmentDate = DateTime.Parse("2005-10-23"),
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Orest Lypa").DoctorID
+                    DoctorID = docotrs.Single(d => d.Name == "Orest Lypa").ID
                 },
                 new Department {
                     Name = "Cardiology",
                     Budget = 123000,
                     EstablishmentDate = DateTime.Parse("2002-10-14"),
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Orest Lypa").DoctorID
+                    DoctorID = docotrs.Single(d => d.Name == "Orest Lypa").ID
                 }
             };
 
@@ -170,23 +170,23 @@ namespace Lab5AspNetCoreEfIndividual.Data
             var treatmentDoctors = new TreatmentAssignment[]
             {
                 new TreatmentAssignment {
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Taras Dub").DoctorID,
+                    DoctorID = docotrs.Single(d => d.Name == "Taras Dub").ID,
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Chemotherapy").ID
                 },
                 new TreatmentAssignment {
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Orest Lypa").DoctorID,
+                    DoctorID = docotrs.Single(d => d.Name == "Orest Lypa").ID,
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Blood test").ID
                 },
-                                new TreatmentAssignment {
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Iren Red").DoctorID,
+                new TreatmentAssignment {
+                    DoctorID = docotrs.Single(d => d.Name == "Iren Red").ID,
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Facial rejuvenation").ID
                 },
                 new TreatmentAssignment {
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Chris Green").DoctorID,
+                    DoctorID = docotrs.Single(d => d.Name == "Chris Green").ID,
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Blood test").ID
                 },
                 new TreatmentAssignment {
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Max Pain").DoctorID,
+                    DoctorID = docotrs.Single(d => d.Name == "Max Pain").ID,
                     TreatmentID = treatments.Single(t => t.TreatmentTitle == "Lobotomy").ID
                 }
             };
@@ -201,14 +201,14 @@ namespace Lab5AspNetCoreEfIndividual.Data
             var consultations = new Consultation[]
             {
                 new Consultation {
-                    PatientID = patients.Single(p => p.PatientName == "Alla Tkach").ID,
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Taras Dub").DoctorID,
+                    PatientID = patients.Single(p => p.Name == "Alla Tkach").ID,
+                    DoctorID = docotrs.Single(d => d.Name == "Taras Dub").ID,
                     ConsultationDate = DateTime.Parse("2022-06-06 14:30:00"),
                     RoomNumber = 222
                 },
                 new Consultation {
-                    PatientID = patients.Single(p => p.PatientName == "Ivan Hanov").ID,
-                    DoctorID = docotrs.Single(d => d.DoctorName == "Orest Lypa").DoctorID,
+                    PatientID = patients.Single(p => p.Name == "Ivan Hanov").ID,
+                    DoctorID = docotrs.Single(d => d.Name == "Orest Lypa").ID,
                     ConsultationDate = DateTime.Parse("2022-06-09 18:20:00"),
                     RoomNumber = 111
                 }
@@ -219,7 +219,7 @@ namespace Lab5AspNetCoreEfIndividual.Data
             {
                 var consultationInDataBase = context.Consultations.Where(
                     s => s.Patient.ID == c.PatientID &&
-                    s.Doctor.DoctorID == c.DoctorID).SingleOrDefault();
+                    s.Doctor.ID == c.DoctorID).SingleOrDefault();
 
                 if (consultationInDataBase == null)
                 {

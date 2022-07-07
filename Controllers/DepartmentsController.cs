@@ -50,7 +50,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
         public IActionResult Create()
         {
             //ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorID");
-            ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorName");
+            ViewData["DoctorID"] = new SelectList(_context.Doctors, "ID", "Name");
             return View();
         }
 
@@ -70,7 +70,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             }
 
             //ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorID", department.DoctorID);
-            ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorName", department.DoctorID);
+            ViewData["DoctorID"] = new SelectList(_context.Doctors, "ID", "Name", department.DoctorID);
             return View(department);
         }
 
@@ -92,7 +92,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 return NotFound();
             }
             //ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorID", department.DoctorID);
-            ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorName", department.DoctorID);
+            ViewData["DoctorID"] = new SelectList(_context.Doctors, "ID", "Name", department.DoctorID);
             return View(department);
         }
 
@@ -243,7 +243,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 Department deletedDepartment = new Department();
                 await TryUpdateModelAsync(deletedDepartment);
                 ModelState.AddModelError(string.Empty, "Unable to save changes. The department was deleted by another user.");
-                ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorName", deletedDepartment.DoctorID);
+                ViewData["DoctorID"] = new SelectList(_context.Doctors, "ID", "Name", deletedDepartment.DoctorID);
                 return View(deletedDepartment);
             }
 
@@ -287,8 +287,8 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                         }
                         if (databaseValues.DoctorID != clientValues.DoctorID)
                         {
-                            Doctor databaseDoctor = await _context.Doctors.FirstOrDefaultAsync(i => i.DoctorID == databaseValues.DoctorID);
-                            ModelState.AddModelError("DoctorID", $"Current value: {databaseDoctor?.DoctorName}");
+                            Doctor databaseDoctor = await _context.Doctors.FirstOrDefaultAsync(i => i.ID == databaseValues.DoctorID);
+                            ModelState.AddModelError("ID", $"Current value: {databaseDoctor?.Name}");
                         }
 
                         ModelState.AddModelError(string.Empty, "The record you attempted to edit "
@@ -308,7 +308,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 }
             }
 
-            ViewData["DoctorID"] = new SelectList(_context.Doctors, "DoctorID", "DoctorName", departmentToUpdate.DoctorID);
+            ViewData["DoctorID"] = new SelectList(_context.Doctors, "ID", "Name", departmentToUpdate.DoctorID);
             return View(departmentToUpdate);
 
         }

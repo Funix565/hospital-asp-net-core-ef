@@ -60,13 +60,13 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                patients = patients.Where(p => p.PatientName.Contains(searchString));
+                patients = patients.Where(p => p.Name.Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    patients = patients.OrderByDescending(p => p.PatientName);
+                    patients = patients.OrderByDescending(p => p.Name);
                     break;
                 case "Insurance":
                     patients = patients.OrderBy(p => p.InsuranceId);
@@ -75,7 +75,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                     patients = patients.OrderByDescending(p => p.InsuranceId);
                     break;
                 default:
-                    patients = patients.OrderBy(p => p.PatientName);
+                    patients = patients.OrderBy(p => p.Name);
                     break;
             }
 
@@ -125,7 +125,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
         // The ValidateAntiForgeryToken attribute helps prevent cross-site request forgery (CSRF) attacks.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PatientName,InsuranceId,Diagnosis")] Patient patient)
+        public async Task<IActionResult> Create([Bind("Name,InsuranceId,Diagnosis")] Patient patient)
         {
             try
             {
@@ -208,7 +208,7 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             if (await TryUpdateModelAsync<Patient>(
                 patientToUpdate,
                 "",
-                p => p.PatientName, p => p.InsuranceId, p => p.Diagnosis))
+                p => p.Name, p => p.InsuranceId, p => p.Diagnosis))
             {
                 try
                 {

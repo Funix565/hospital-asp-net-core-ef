@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Lab5AspNetCoreEfIndividual.Models
 {
-    public class Doctor
+    public class Doctor : Person
     {
         // Entity properties that are named ID or classnameID are recognized as PK properties.
-        public int DoctorID { get; set; }
+        //public int DoctorID { get; set; }
 
-        [Display(Name = "Doctor Name")]
-        public string DoctorName { get; set; }
+        //[Display(Name = "Doctor Name")]
+        //public string DoctorName { get; set; }
 
         [Display(Name = "Job Title")]
         public string JobTitle { get; set; }

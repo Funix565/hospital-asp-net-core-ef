@@ -11,10 +11,10 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PatientName)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PatientName)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.InsuranceId)
@@ -41,7 +41,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Doctor.DoctorName)
+                            @Html.DisplayFor(modelItem => item.Doctor.Name)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.RoomNumber)
