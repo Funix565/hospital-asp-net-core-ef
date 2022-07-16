@@ -29,19 +29,76 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
 
         // Add sorting functionality
         // Add filtering functionality
+        //public async Task<IActionResult> Index(
+        //    string sortOrder,
+        //    string currentFilter,
+        //    string searchString,
+        //    int? pageNumber)
+        //{
+        //    // this must be included in the paging links in order to keep the sort order the same while paging.
+        //    ViewData["CurrentSort"] = sortOrder;
+        //    ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        //    ViewData["InsuranceSortParm"] = sortOrder == "Insurance" ? "ins_desc" : "Insurance";
+
+        //    // If the search string is changed during paging, the page has to be reset to 1,
+        //    // because the new filter can result in different data to display.
+        //    if (searchString != null)
+        //    {
+        //        pageNumber = 1;
+        //    }
+        //    else
+        //    {
+        //        searchString = currentFilter;
+        //    }
+
+        //    // This value must be included in the paging links in order to maintain the filter settings during paging,
+        //    // and it must be restored to the text box when the page is redisplayed.
+        //    ViewData["CurrentFilter"] = searchString;
+
+        //    var patients = from p in _context.Patients
+        //                   select p;
+
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        patients = patients.Where(p => p.Name.Contains(searchString));
+        //    }
+
+        //    switch (sortOrder)
+        //    {
+        //        case "name_desc":
+        //            patients = patients.OrderByDescending(p => p.Name);
+        //            break;
+        //        case "Insurance":
+        //            patients = patients.OrderBy(p => p.InsuranceId);
+        //            break;
+        //        case "ins_desc":
+        //            patients = patients.OrderByDescending(p => p.InsuranceId);
+        //            break;
+        //        default:
+        //            patients = patients.OrderBy(p => p.Name);
+        //            break;
+        //    }
+
+        //    int pageSize = 3;
+        //    // The two question marks represent the null-coalescing operator.
+        //    // The null-coalescing operator defines a default value for a nullable type;
+        //    // the expression (pageNumber ?? 1) means return the value of pageNumber if it has a value,
+        //    // or return 1 if pageNumber is null.
+        //    return View(await PaginatedList<Patient>.CreateAsync(patients.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+        //    //return View(await patients.AsNoTracking().ToListAsync());
+        //}
+
         public async Task<IActionResult> Index(
             string sortOrder,
             string currentFilter,
             string searchString,
             int? pageNumber)
         {
-            // this must be included in the paging links in order to keep the sort order the same while paging.
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["InsuranceSortParm"] = sortOrder == "Insurance" ? "ins_desc" : "Insurance";
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "LastName_desc" : "";
+            ViewData["InsuranceSortParm"] = sortOrder == "Insurance" ? "Insurance_desc" : "Insurance";
 
-            // If the search string is changed during paging, the page has to be reset to 1,
-            // because the new filter can result in different data to display.
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -51,42 +108,44 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 searchString = currentFilter;
             }
 
-            // This value must be included in the paging links in order to maintain the filter settings during paging,
-            // and it must be restored to the text box when the page is redisplayed.
             ViewData["CurrentFilter"] = searchString;
 
-            var patients = from p in _context.Patients
-                           select p;
+            var patients = from p in _context.Patients select p;
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 patients = patients.Where(p => p.Name.Contains(searchString));
             }
 
-            switch (sortOrder)
+            if (!String.IsNullOrEmpty(sortOrder))
             {
-                case "name_desc":
-                    patients = patients.OrderByDescending(p => p.Name);
-                    break;
-                case "Insurance":
-                    patients = patients.OrderBy(p => p.InsuranceId);
-                    break;
-                case "ins_desc":
-                    patients = patients.OrderByDescending(p => p.InsuranceId);
-                    break;
-                default:
-                    patients = patients.OrderBy(p => p.Name);
-                    break;
+                sortOrder = "Name";
+            }
+
+            bool descending = false;
+            if (sortOrder.EndsWith("_desc"))
+            {
+                sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+                descending = true;
+            }
+
+            if (descending)
+            {
+                // We use OrderBy with property as string
+                // Earlier we set the property manually
+                // ```case "name_desc":
+                //      patients = patients.OrderByDescending(p => p.Name);
+                //      break; ```
+                patients = patients.OrderByDescending(e => EF.Property<object>(e, sortOrder));
+            }
+            else
+            {
+                patients = patients.OrderBy(e => EF.Property<object>(e, sortOrder));
             }
 
             int pageSize = 3;
-            // The two question marks represent the null-coalescing operator.
-            // The null-coalescing operator defines a default value for a nullable type;
-            // the expression (pageNumber ?? 1) means return the value of pageNumber if it has a value,
-            // or return 1 if pageNumber is null.
-            return View(await PaginatedList<Patient>.CreateAsync(patients.AsNoTracking(), pageNumber ?? 1, pageSize));
-
-            //return View(await patients.AsNoTracking().ToListAsync());
+            return View(await PaginatedList<Patient>.CreateAsync(patients.AsNoTracking(),
+                pageNumber ?? 1, pageSize));
         }
 
         // GET: Patients/Details/5
@@ -100,11 +159,14 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
             // The Include and ThenInclude methods cause the context to load the Patient.Consultations nav prop
             // and within each consultation the Consultation.Doctor nav prop.
             // The AsNoTracking improves performance in scenarios where the entities returned won't be updated in the current context's lifetime
+            // In the tutorial SingleOrDefaultAsync selects up to 2 rows:
+            // - If the query would return multiple rows, the method returns null.
+            // - o determine whether the query would return multiple rows, EF has to check if it returns at least 2.
             var patient = await _context.Patients
                 .Include(s => s.Consultations)
                     .ThenInclude(e => e.Doctor)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.ID == id); 
             if (patient == null)
             {
                 return NotFound();

@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "UpdateDepartmentBudgets";
+}
+
+<h2>Update Department Budgets</h2>
+
+@if (ViewData["RowsAffected"] == null)
+{
+    <form asp-action="UpdateDepartmentBudgets">
+        <div class="form-actions no-color">
+            <p>
+                @*separator -- comma*@
+                Enter a percent/100 to multiply every department's budget by: @Html.TextBox("percent")
+            </p>
+            <p>
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>
+}
+@if (ViewData["RowsAffected"] != null)
+{
+    <p>
+        Number of rows updated: @ViewData["RowsAffected"]
+    </p>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

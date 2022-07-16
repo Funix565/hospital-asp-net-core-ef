@@ -34,10 +34,22 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
                 return NotFound();
             }
 
+            //var department = await _context.Departments
+            //    .Include(d => d.Chief)
+            //    .AsNoTracking()
+            //    .FirstOrDefaultAsync(m => m.DepartmentID == id);
+
+            string query = "SELECT *, xmin FROM \"Department\" WHERE \"DepartmentID\" = {0}";
+            
+            // TODO: Report this and save exceptions
+            // string query = "SELECT * FROM \"Department\" WHERE \"DepartmentID\" = {0}"; <-- FAILS
             var department = await _context.Departments
+                .FromSqlRaw(query, id)
                 .Include(d => d.Chief)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.DepartmentID == id);
+                .FirstOrDefaultAsync();
+
+
             if (department == null)
             {
                 return NotFound();
@@ -409,6 +421,30 @@ namespace Lab5AspNetCoreEfIndividual.Controllers
         private bool DepartmentExists(int id)
         {
             return _context.Departments.Any(e => e.DepartmentID == id);
+        }
+
+        public IActionResult UpdateDepartmentBudgets()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDepartmentBudgets(float? percent)
+        {
+            if (percent != null)
+            {
+                // TODO: https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/data/ef-mvc/intro/samples/cu-final/Controllers/CoursesController.cs#L180
+                // ExecuteSqlCommandAsync --> ExecuteSqlRawAsync
+                // https://github.com/dotnet/AspNetCore.Docs/pull/23401
+                // https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.x/breaking-changes#fromsql
+                // 
+                ViewData["RowsAffected"] =
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "UPDATE \"Department\" SET \"Budget\" = ceil(\"Budget\" + \"Budget\" * {0})",
+                        parameters: percent);
+            }
+
+            return View();
         }
     }
 }
